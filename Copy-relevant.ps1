@@ -14,10 +14,13 @@ $srcPaths = @($SAP, $MOC, $Downloads)
 
 #Iterating through the array
 foreach ($obj in $srcPaths) {
-    # checks if the path, like "$OneDrive\SAP" exists and if not it will created as a dir
-    if(-not(Test-Path "$OneDrive\$obj[0]")) {
-        New-Item -Path "$OneDrive\$obj[0]" -ItemType Directory
+    # checks if the apps path exits i. e. the app is installed (skips if not)
+    if(Test-Path "$obj[1]") {
+        # checks if the path, like "$OneDrive\SAP" exists and if not it will created as a dir
+        if(-not(Test-Path "$OneDrive\$obj[0]")) {
+            New-Item -Path "$OneDrive\$obj[0]" -ItemType Directory
+        }
+        # copies everything the user needs to said OneDrive
+        Copy-Item -Path "$obj[1]" -Destination "$OneDrive\$obj[0]" -Recurse
     }
-    # copies everything the user needs to said OneDrive
-    Copy-Item -Path "$obj[1]" -Destination "$OneDrive\$obj[0]" -Recurse
 }
